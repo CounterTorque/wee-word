@@ -1,7 +1,7 @@
 <script>
   import { onMount } from 'svelte'
   import { game } from './stores/game.js'
-  import { loadPuzzle, todayString } from './lib/puzzleLoader.js'
+  import { loadPuzzle, todayString, dateFromUrl } from './lib/puzzleLoader.js'
   import { loadProgress } from './lib/storage.js'
   import Grid from './components/Grid.svelte'
   import CluePanel from './components/CluePanel.svelte'
@@ -14,7 +14,7 @@
   let loading = $state(true)
 
   onMount(async () => {
-    const date = todayString()
+    const date = dateFromUrl() ?? todayString()
     try {
       const puzzle = await loadPuzzle(date)
       const saved = loadProgress(date)

@@ -12,6 +12,24 @@ export async function loadPuzzle(date) {
   return puzzle
 }
 
+/**
+ * Reads ?date=MM-DD-YYYY from the URL and returns YYYY-MM-DD, or null if
+ * absent or unparseable.
+ */
+export function dateFromUrl() {
+  const param = new URLSearchParams(window.location.search).get('date')
+  if (!param) return null
+  const match = param.match(/^(\d{2})-(\d{2})-(\d{4})$/)
+  if (!match) return null
+  const [, mm, dd, yyyy] = match
+  const iso = `${yyyy}-${mm}-${dd}`
+  // reject dates that don't round-trip (e.g. 02-31-2026)
+  const d = new Date(iso + 'T00:00:00')
+  if (isNaN(d.getTime())) return null
+  if (String(d.getMonth() + 1).padStart(2, '0') !== mm) return null
+  return iso
+}
+
 /** Returns today's date as YYYY-MM-DD in local time. */
 export function todayString() {
   const d = new Date()
