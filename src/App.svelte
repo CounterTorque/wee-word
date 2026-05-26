@@ -63,6 +63,8 @@
     {/if}
   </div>
 
+  <footer>v{__APP_VERSION__}</footer>
+
   {#if showModal}
     <CompletionModal
       seconds={$game.timerSeconds}
@@ -156,5 +158,13 @@
 
   .status.error {
     color: #c0392b;
+  }
+
+  footer {
+    text-align: center;
+    padding: 0.5rem;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 0.7rem;
+    color: #bbb;
   }
 </style>
