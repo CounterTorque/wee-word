@@ -22,14 +22,15 @@ npm run dev
 
 Puzzles are static JSON files in `/public/puzzles/YYYY-MM-DD.json`.
 
-### Generate with AI
+### Generate with AI (Claude Code skill)
 
-```bash
-export ANTHROPIC_API_KEY=sk-...
-npm run generate -- --date 2026-06-02 --theme "ocean life"
+Open this project in Claude Code or Claude Desktop and run:
+
+```
+/generate-puzzle --date 2026-06-02 --theme "ocean life"
 ```
 
-The script calls Claude, validates the result (symmetry, word lengths, clue count), retries up to 3× on failure, and writes the file.
+No API key needed — Claude generates the puzzle directly.
 
 | Flag | Default | Description |
 |---|---|---|
