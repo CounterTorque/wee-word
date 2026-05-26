@@ -133,14 +133,11 @@ function createGameStore() {
       const newChecked = { ...s.checkedCells }
       delete newChecked[cellKey(r, c)]
 
-      // advance: next empty in word, or just next cell
+      // advance to next empty cell in word; stay put if the word is now full
       let nextR = r, nextC = c
       const nextEmpty = nextEmptyInWord(s.puzzle.grid, newUserGrid, r, c, s.direction)
       if (nextEmpty) {
         nextR = nextEmpty.row; nextC = nextEmpty.col
-      } else {
-        const next = nextCellInWord(s.puzzle.grid, r, c, s.direction)
-        nextR = next.row; nextC = next.col
       }
 
       const complete = checkComplete(s.puzzle, newUserGrid)

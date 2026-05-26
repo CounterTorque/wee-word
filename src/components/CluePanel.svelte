@@ -70,7 +70,7 @@
 
   h3 {
     font-family: 'Georgia', serif;
-    font-size: 0.75rem;
+    font-size: 0.8rem;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.08em;
@@ -95,7 +95,7 @@
     cursor: pointer;
     border-radius: 3px;
     font-family: 'Georgia', serif;
-    font-size: 0.85rem;
+    font-size: 1rem;
     line-height: 1.35;
     color: #222;
   }
