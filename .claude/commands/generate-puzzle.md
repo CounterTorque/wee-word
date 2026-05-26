@@ -1,27 +1,48 @@
 ---
-description: Generate a Wee-Word crossword puzzle and write it to public/puzzles/YYYY-MM-DD.json
+description: Generate one or more Wee-Word crossword puzzles and write them to public/puzzles/
 allowed-tools: Write, Read, Bash
 ---
 
-Generate a Wee-Word crossword puzzle JSON file.
+Generate Wee-Word crossword puzzle JSON files.
 
 Arguments: $ARGUMENTS
 
 ## Parse arguments
 
 Extract from `$ARGUMENTS`:
-- `--date YYYY-MM-DD` — target date (default: today's date from `date +%F`)
-- `--theme "..."` — optional theme hint
-- `--size N` — grid size, `5` or `6` (default: auto-detect from date — Saturday/Sunday → 6, weekdays → 5)
-- `--force` — overwrite if file already exists
+- `--date YYYY-MM-DD` — single target date (default: today from `date +%F`)
+- `--from YYYY-MM-DD` — start of a date range (inclusive)
+- `--to YYYY-MM-DD` — end of a date range (inclusive); requires `--from`
+- `--theme "..."` — optional theme hint (applied to all puzzles in a range)
+- `--size N` — override grid size to `5` or `6` for all dates (default: auto-detect per date)
+- `--force` — overwrite files that already exist
 
-Run `date +%F` to get today's date if `--date` is not provided.
+**Determine the list of dates to generate:**
 
-Check whether the output file `public/puzzles/<date>.json` already exists. If it does and `--force` was not passed, stop and tell the user.
+- If `--from` and `--to` are both provided: expand the full inclusive range. Use this shell command to enumerate the dates:
+  ```bash
+  node -e "
+  const from = new Date('$FROM'); const to = new Date('$TO');
+  for (let d = new Date(from); d <= to; d.setDate(d.getDate()+1))
+    console.log(d.toISOString().slice(0,10));
+  "
+  ```
+- If only `--date` is provided (or no date flags): the list is just that one date.
+- If only `--from` is provided without `--to`: treat it as a single date (same as `--date`).
 
-## Generate the puzzle
+For each date in the list, check whether `public/puzzles/<date>.json` already exists. Skip any that exist unless `--force` was passed, and note which were skipped.
 
-Create a valid crossword puzzle of the appropriate size. Rules:
+If the list is more than one date, announce the full list before starting so the user knows what's coming.
+
+## Per-date: determine size
+
+For each date, determine grid size:
+- If `--size` was provided, use it for all dates.
+- Otherwise: Saturday or Sunday → `6`, all other days → `5`.
+
+## Per-date: generate the puzzle
+
+Create a valid crossword puzzle for each date. Vary the grids — don't reuse the same layout across consecutive dates.
 
 **Grid rules:**
 - `size × size` grid (5×5 or 6×6)
@@ -37,22 +58,22 @@ Create a valid crossword puzzle of the appropriate size. Rules:
 - Cell numbering: scan left-to-right, top-to-bottom; number a cell if it starts an across word, a down word, or both. Numbers are sequential starting at 1
 - Clues should be concise and clever — avoid overly obscure references
 
-**If a theme was provided**, let it inspire the answers and clues.
+**If a theme was provided**, let it inspire the answers and clues across the batch.
 
-## Validate before writing
+## Per-date: validate before writing
 
-Before writing the file, verify:
+Before writing each file, verify:
 1. Grid is exactly `size` rows × `size` columns
 2. Rotational symmetry holds for every black square
 3. Every word in the grid is ≥ 3 letters
 4. Across clue numbers match cells that start across words; same for down
 5. No clue number appears twice in the same direction
 
-If validation fails, fix the grid/clues and re-check before writing.
+Fix any issues before writing.
 
-## Output format
+## Per-date: output format
 
-Write the file to `public/puzzles/<date>.json` **without** a `gridHash` field — the hash is added in the next step:
+Write each file to `public/puzzles/<date>.json` **without** a `gridHash` field — the hash is added in the final step:
 
 ```json
 {
@@ -82,16 +103,16 @@ Write the file to `public/puzzles/<date>.json` **without** a `gridHash` field �
 }
 ```
 
-## Stamp the grid hash
+## Stamp grid hashes
 
-After writing the file, run:
+After all files are written, run once:
 
 ```bash
 node scripts/stamp-hashes.js
 ```
 
-This computes a hash of the grid content and adds a `gridHash` field to every puzzle in `public/puzzles/`. The app uses this hash to detect when a live puzzle has changed and automatically discards stale saved progress from players who started the old version.
+This adds a `gridHash` field to every puzzle. The app uses this hash to detect when a live puzzle has changed and discard stale saved progress.
 
 ## Confirm
 
-Print the file path, the `gridHash` value, and the grid so the user can do a quick visual check.
+Print a summary table: date | size | gridHash | status (written / skipped). For single-puzzle runs, print the grid for a quick visual check.
