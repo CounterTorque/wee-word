@@ -2,24 +2,71 @@
   "date": "2026-05-26",
   "size": 5,
   "grid": [
-    ["B", "R", "A", "V", "E"],
-    ["L", ".", "T", ".", "A"],
-    ["U", "S", "E", "R", "S"],
-    ["E", ".", ".", ".", "Y"],
-    ["S", "T", "E", "A", "M"]
+    [
+      "C",
+      "O",
+      "A",
+      "S",
+      "T"
+    ],
+    [
+      "I",
+      ".",
+      "R",
+      ".",
+      "R"
+    ],
+    [
+      "G",
+      "U",
+      "I",
+      "D",
+      "E"
+    ],
+    [
+      "A",
+      ".",
+      "S",
+      ".",
+      "K"
+    ],
+    [
+      "R",
+      "E",
+      "E",
+      "F",
+      "S"
+    ]
   ],
   "clues": {
     "across": [
-      { "number": 1, "clue": "Courageous" },
-      { "number": 5, "clue": "What an app has many of" },
-      { "number": 7, "clue": "Locomotion via water vapor" }
+      {
+        "number": 1,
+        "clue": "Shoreline"
+      },
+      {
+        "number": 4,
+        "clue": "Tour leader"
+      },
+      {
+        "number": 5,
+        "clue": "Coral formations"
+      }
     ],
     "down": [
-      { "number": 1, "clue": "Deep indigo shades" },
-      { "number": 2, "clue": "Cozy drinking establishment" },
-      { "number": 3, "clue": "Modify text" },
-      { "number": 4, "clue": "Distant" },
-      { "number": 6, "clue": "Simple" }
+      {
+        "number": 1,
+        "clue": "Havana export"
+      },
+      {
+        "number": 2,
+        "clue": "Get out of bed"
+      },
+      {
+        "number": 3,
+        "clue": "Long hikes"
+      }
     ]
-  }
+  },
+  "gridHash": "6fd7fe82"
 }

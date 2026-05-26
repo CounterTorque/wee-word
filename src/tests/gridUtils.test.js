@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest'
 import {
   isBlack,
   computeNumbers,
+  computeGridHash,
   getWordBounds,
   getWordCells,
   getAllWords,
@@ -184,5 +185,22 @@ describe('checkComplete', () => {
       ['e', 'f', 'g'],
     ]
     expect(checkComplete(puzzle, userGrid)).toBe(true)
+  })
+})
+
+describe('computeGridHash', () => {
+  it('returns an 8-char hex string', () => {
+    expect(computeGridHash(grid3)).toMatch(/^[0-9a-f]{8}$/)
+  })
+  it('is deterministic for the same grid', () => {
+    expect(computeGridHash(grid3)).toBe(computeGridHash(grid3))
+  })
+  it('differs when any cell changes', () => {
+    const modified = grid3.map(row => [...row])
+    modified[0][0] = 'Z'
+    expect(computeGridHash(modified)).not.toBe(computeGridHash(grid3))
+  })
+  it('differs between distinct grids', () => {
+    expect(computeGridHash(grid3)).not.toBe(computeGridHash(grid5))
   })
 })

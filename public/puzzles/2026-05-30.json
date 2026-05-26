@@ -2,26 +2,96 @@
   "date": "2026-05-30",
   "size": 6,
   "grid": [
-    ["S", "P", "R", "I", "N", "G"],
-    ["T", ".", "I", ".", "O", "."],
-    ["O", "C", "E", "A", "N", "S"],
-    ["R", ".", ".", ".", "E", "."],
-    ["M", "A", "P", "L", "E", "S"],
-    [".", ".", "S", ".", ".", "."]
+    [
+      "S",
+      "P",
+      "R",
+      "I",
+      "N",
+      "G"
+    ],
+    [
+      "T",
+      ".",
+      "I",
+      ".",
+      "O",
+      "."
+    ],
+    [
+      "O",
+      "C",
+      "E",
+      "A",
+      "N",
+      "S"
+    ],
+    [
+      "R",
+      ".",
+      ".",
+      ".",
+      "E",
+      "."
+    ],
+    [
+      "M",
+      "A",
+      "P",
+      "L",
+      "E",
+      "S"
+    ],
+    [
+      ".",
+      ".",
+      "S",
+      ".",
+      ".",
+      "."
+    ]
   ],
   "clues": {
     "across": [
-      { "number": 1, "clue": "Season after winter" },
-      { "number": 5, "clue": "Vast bodies of salt water" },
-      { "number": 8, "clue": "Syrup trees" }
+      {
+        "number": 1,
+        "clue": "Season after winter"
+      },
+      {
+        "number": 5,
+        "clue": "Vast bodies of salt water"
+      },
+      {
+        "number": 8,
+        "clue": "Syrup trees"
+      }
     ],
     "down": [
-      { "number": 1, "clue": "Violent weather event" },
-      { "number": 2, "clue": "Ride the waves" },
-      { "number": 3, "clue": "Jump rope or hula hoop" },
-      { "number": 4, "clue": "A note to take" },
-      { "number": 6, "clue": "\"No\" votes" },
-      { "number": 7, "clue": "Sun's output" }
+      {
+        "number": 1,
+        "clue": "Violent weather event"
+      },
+      {
+        "number": 2,
+        "clue": "Ride the waves"
+      },
+      {
+        "number": 3,
+        "clue": "Jump rope or hula hoop"
+      },
+      {
+        "number": 4,
+        "clue": "A note to take"
+      },
+      {
+        "number": 6,
+        "clue": "\"No\" votes"
+      },
+      {
+        "number": 7,
+        "clue": "Sun's output"
+      }
     ]
-  }
+  },
+  "gridHash": "877f5b9b"
 }

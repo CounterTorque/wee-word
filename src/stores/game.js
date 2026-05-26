@@ -8,6 +8,7 @@ import {
   prevCellInWord,
   nextEmptyInWord,
   checkComplete,
+  computeGridHash,
   isBlack,
 } from '../lib/gridUtils.js'
 import { saveProgress, loadProgress, clearProgress, recordCompletion } from '../lib/storage.js'
@@ -16,6 +17,7 @@ function createGameStore() {
   const initial = {
     puzzle: null,
     size: 5,
+    gridHash: null,
     userGrid: [],
     numbers: [],
     words: [],
@@ -64,6 +66,7 @@ function createGameStore() {
     stopTimer()
     const size = puzzle.size
     const grid = puzzle.grid
+    const gridHash = computeGridHash(grid)
     const numbers = computeNumbers(grid)
     const words = getAllWords(grid)
     const userGrid = savedProgress || emptyGrid(size)
@@ -80,6 +83,7 @@ function createGameStore() {
       ...initial,
       puzzle,
       size,
+      gridHash,
       userGrid,
       numbers,
       words,
@@ -142,7 +146,7 @@ function createGameStore() {
       const complete = checkComplete(s.puzzle, newUserGrid)
       if (complete) stopTimer()
 
-      saveProgress(s.puzzle.date, newUserGrid)
+      saveProgress(s.puzzle.date, newUserGrid, s.gridHash)
 
       let streak = s.streak
       if (complete && !s.isComplete) {
@@ -171,7 +175,7 @@ function createGameStore() {
 
       if (newUserGrid[r][c] && !s.revealedCells[cellKey(r, c)]) {
         newUserGrid[r][c] = ''
-        saveProgress(s.puzzle.date, newUserGrid)
+        saveProgress(s.puzzle.date, newUserGrid, s.gridHash)
         return { ...s, userGrid: newUserGrid }
       }
 
@@ -184,7 +188,7 @@ function createGameStore() {
       if (!s.revealedCells[cellKey(prev.row, prev.col)]) {
         newUserGrid[prev.row][prev.col] = ''
       }
-      saveProgress(s.puzzle.date, newUserGrid)
+      saveProgress(s.puzzle.date, newUserGrid, s.gridHash)
       return {
         ...s,
         userGrid: newUserGrid,
@@ -318,7 +322,7 @@ function createGameStore() {
       delete newChecked[cellKey(r, c)]
       const complete = checkComplete(s.puzzle, newUserGrid)
       if (complete) stopTimer()
-      saveProgress(s.puzzle.date, newUserGrid)
+      saveProgress(s.puzzle.date, newUserGrid, s.gridHash)
       return { ...s, userGrid: newUserGrid, revealedCells: newRevealed, checkedCells: newChecked, isComplete: complete }
     })
   }
@@ -337,7 +341,7 @@ function createGameStore() {
       }
       const complete = checkComplete(s.puzzle, newUserGrid)
       if (complete) stopTimer()
-      saveProgress(s.puzzle.date, newUserGrid)
+      saveProgress(s.puzzle.date, newUserGrid, s.gridHash)
       return { ...s, userGrid: newUserGrid, revealedCells: newRevealed, checkedCells: newChecked, isComplete: complete }
     })
   }
@@ -353,7 +357,7 @@ function createGameStore() {
         }
       }
       stopTimer()
-      saveProgress(s.puzzle.date, newUserGrid)
+      saveProgress(s.puzzle.date, newUserGrid, s.gridHash)
       return { ...s, userGrid: newUserGrid, revealedCells: newRevealed, checkedCells: {}, isComplete: true }
     })
   }

@@ -3,6 +3,7 @@
   import { game } from './stores/game.js'
   import { loadPuzzle, todayString, dateFromUrl } from './lib/puzzleLoader.js'
   import { loadProgress } from './lib/storage.js'
+  import { computeGridHash } from './lib/gridUtils.js'
   import Grid from './components/Grid.svelte'
   import CluePanel from './components/CluePanel.svelte'
   import ActiveClue from './components/ActiveClue.svelte'
@@ -17,7 +18,7 @@
     const date = dateFromUrl() ?? todayString()
     try {
       const puzzle = await loadPuzzle(date)
-      const saved = loadProgress(date)
+      const saved = loadProgress(date, computeGridHash(puzzle.grid))
       game.loadPuzzle(puzzle, saved)
     } catch (err) {
       loadError = err.message

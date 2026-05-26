@@ -52,7 +52,7 @@ If validation fails, fix the grid/clues and re-check before writing.
 
 ## Output format
 
-Write the file to `public/puzzles/<date>.json` with this exact shape:
+Write the file to `public/puzzles/<date>.json` **without** a `gridHash` field — the hash is added in the next step:
 
 ```json
 {
@@ -82,4 +82,16 @@ Write the file to `public/puzzles/<date>.json` with this exact shape:
 }
 ```
 
-After writing, confirm the file path and print the grid so the user can do a quick visual check.
+## Stamp the grid hash
+
+After writing the file, run:
+
+```bash
+node scripts/stamp-hashes.js
+```
+
+This computes a hash of the grid content and adds a `gridHash` field to every puzzle in `public/puzzles/`. The app uses this hash to detect when a live puzzle has changed and automatically discards stale saved progress from players who started the old version.
+
+## Confirm
+
+Print the file path, the `gridHash` value, and the grid so the user can do a quick visual check.

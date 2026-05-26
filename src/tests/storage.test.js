@@ -62,17 +62,31 @@ describe('hasCompletedToday', () => {
 
 describe('saveProgress / loadProgress / clearProgress', () => {
   const grid = [['A', 'B'], ['C', '']]
+  const hash = 'abc12345'
 
-  it('round-trips progress', () => {
-    saveProgress('2026-05-26', grid)
-    expect(loadProgress('2026-05-26')).toEqual(grid)
+  it('round-trips progress when hash matches', () => {
+    saveProgress('2026-05-26', grid, hash)
+    expect(loadProgress('2026-05-26', hash)).toEqual(grid)
   })
+
   it('returns null when nothing saved', () => {
-    expect(loadProgress('2026-05-27')).toBeNull()
+    expect(loadProgress('2026-05-27', hash)).toBeNull()
   })
+
+  it('returns null when hash does not match (puzzle changed)', () => {
+    saveProgress('2026-05-26', grid, hash)
+    expect(loadProgress('2026-05-26', 'different-hash')).toBeNull()
+  })
+
+  it('returns null for legacy bare-array format (pre-hash)', () => {
+    // Simulate old format stored before gridHash was introduced
+    store['weeword_progress_2026-05-26'] = JSON.stringify(grid)
+    expect(loadProgress('2026-05-26', hash)).toBeNull()
+  })
+
   it('clearProgress removes saved data', () => {
-    saveProgress('2026-05-26', grid)
+    saveProgress('2026-05-26', grid, hash)
     clearProgress('2026-05-26')
-    expect(loadProgress('2026-05-26')).toBeNull()
+    expect(loadProgress('2026-05-26', hash)).toBeNull()
   })
 })

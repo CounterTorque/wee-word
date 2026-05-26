@@ -13,34 +13,44 @@ export function loadStreak() {
 
 export function recordCompletion(date) {
   const streak = loadStreak()
-  const today = date
-  const yesterday = offsetDate(today, -1)
-
+  const yesterday = offsetDate(date, -1)
   const newCount = streak.lastDate === yesterday ? streak.count + 1 : 1
   const newBest = Math.max(streak.bestStreak, newCount)
-
-  const updated = { count: newCount, bestStreak: newBest, lastDate: today }
+  const updated = { count: newCount, bestStreak: newBest, lastDate: date }
   localStorage.setItem(STREAK_KEY, JSON.stringify(updated))
   return updated
 }
 
 export function hasCompletedToday(date) {
-  const streak = loadStreak()
-  return streak.lastDate === date
+  return loadStreak().lastDate === date
 }
 
-export function saveProgress(date, userGrid) {
+/**
+ * Saves progress along with the current grid hash so we can detect if the
+ * puzzle is later changed and the saved letters become invalid.
+ */
+export function saveProgress(date, userGrid, gridHash) {
   try {
-    localStorage.setItem(progressKey(date), JSON.stringify(userGrid))
+    localStorage.setItem(progressKey(date), JSON.stringify({ userGrid, gridHash }))
   } catch {
     // storage full — silently ignore
   }
 }
 
-export function loadProgress(date) {
+/**
+ * Loads saved progress for `date`. Returns the userGrid array if the stored
+ * gridHash matches the current puzzle's hash, otherwise null (stale progress
+ * from a changed puzzle is discarded).
+ */
+export function loadProgress(date, gridHash) {
   try {
     const raw = localStorage.getItem(progressKey(date))
-    return raw ? JSON.parse(raw) : null
+    if (!raw) return null
+    const stored = JSON.parse(raw)
+    // Legacy format was a bare array — treat as stale
+    if (Array.isArray(stored)) return null
+    if (stored.gridHash !== gridHash) return null
+    return stored.userGrid
   } catch {
     return null
   }

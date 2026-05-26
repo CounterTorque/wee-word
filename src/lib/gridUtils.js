@@ -156,6 +156,20 @@ export function nextEmptyInWord(grid, userGrid, r, c, dir) {
 }
 
 /**
+ * djb2 hash of the grid content. Used to detect puzzle changes so stale
+ * localStorage progress can be discarded automatically.
+ */
+export function computeGridHash(grid) {
+  const str = JSON.stringify(grid)
+  let h = 5381
+  for (let i = 0; i < str.length; i++) {
+    h = ((h << 5) + h) ^ str.charCodeAt(i)
+    h = h >>> 0
+  }
+  return h.toString(16).padStart(8, '0')
+}
+
+/**
  * Returns true when every non-black cell has a matching letter.
  */
 export function checkComplete(puzzle, userGrid) {
